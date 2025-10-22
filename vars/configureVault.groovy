@@ -31,7 +31,7 @@ def call(body) {
   // def scanFailed = false
 
   pipeline {
-    agent { label 'kuber-agent' }
+    agent { label 'kube-agent' }
 
     // environment {
     //   DOCKER_CERT_PATH = "${certsPath}"
