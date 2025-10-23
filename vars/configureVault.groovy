@@ -10,7 +10,7 @@ def call(body) {
   body.delegate = config
   body()
 
-  // def url = config.url
+  def vault_addr = config.vaultAddr
   // def folder = config.folder
   // def branch = config.branch ?: 'main'
   // def credentialId = config.credentialId
@@ -45,8 +45,8 @@ def call(body) {
         steps {
            withCredentials(
             [[$class: 'VaultTokenCredentialBinding', 
-              credentialsId: 'vaulttoken', 
-              vaultAddr: 'https://localhost:8200'
+              credentialsId: 'vaultAdminToken', 
+              vaultAddr: vault_addr
             ]]) {
               sh "vault login $VAULT_TOKEN"
             }
