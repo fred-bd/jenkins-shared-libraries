@@ -65,6 +65,8 @@ def call(body) {
         steps {
           script {
             kubeauth_approle = fileUtils.runSHScriptWithReturn(["policies": "${policies}"], 'vault-scripts/configure-kubeauth.sh')
+
+            println "approle: ${kubeauth_approle}"
           }
         }
       }
