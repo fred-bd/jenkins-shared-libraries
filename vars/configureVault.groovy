@@ -24,7 +24,6 @@ def call(body) {
   // def scanImage = params.Scan
 
   println "ok: ${vault_cred}"
-  println "ok: ${config}"
 
   // def dindPort
   // def containerName
