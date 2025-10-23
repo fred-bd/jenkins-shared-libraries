@@ -9,4 +9,4 @@ vault kv get \
 
 echo "Trying to access kubernetes"
 
-kubectl get ns --kubeconfig kube-config
+kubectl get po -A --kubeconfig kube-config
