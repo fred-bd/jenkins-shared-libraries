@@ -54,7 +54,7 @@ def call(body) {
               script {
                 policies = fileUtils.runSHScriptWithReturn(
                   ["secret_key":"${kubefileSecret}", "kv_engine_path":"${kubefilePath}"], 
-                  'vault-scripts/configure-policies.sh'
+                  'flux-scripts/configure-kubeconfig.sh'
                 )
               }
             }
