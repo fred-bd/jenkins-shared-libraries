@@ -6,7 +6,7 @@ auth='auth-manager'
 issuer='issuer-manager'
 policy='policy-manager'
 
-cat <<EOF | vault policy write $auth -
+cat <<EOF | vault policy write $auth --no-print  -
 path "sys/auth/*" { capabilities = ["create", "update", "sudo"] }
 path "sys/auth"   { capabilities = ["read"] }
 path "auth/*"     { capabilities = [ "update", "create" ] }
