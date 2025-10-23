@@ -20,7 +20,6 @@ vault write auth/$APPROLE_NAME/role/configurer \
   token_max_ttl=8h \
   secret_id_num_uses=0 
 
-echo "$policies"
 # approle_id=$(vault read auth/$APPROLE_NAME/role/configurer/role-id -format=json | jq -r .data.role_id)
 # secret_id=$(vault write -force auth/$APPROLE_NAME/role/configurer/secret-id -format=json | jq -r .data.secret_id)
 

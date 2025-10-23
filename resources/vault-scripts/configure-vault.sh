@@ -86,76 +86,76 @@ runs:
       name: Configure vault issuer certificate Root CA
       id: configure-issuer-ca
       run: |
-        PKI_NAME="$(echo ${{ inputs.common_name }} | sed 's/\./-/g')"
+    #     PKI_NAME="$(echo ${{ inputs.common_name }} | sed 's/\./-/g')"
         
-        SECRET_EXISTS=$(vault secrets list | grep "bede-apps-com" || true)
+    #     SECRET_EXISTS=$(vault secrets list | grep "bede-apps-com" || true)
 
-        if [ -z "$SECRET_EXISTS" ]; then
-          vault secrets enable -path $PKI_NAME pki
-          vault secrets tune -max-lease-ttl=87600h $PKI_NAME
-        else
-          echo "!!$PKI_NAME already exists!!"
-        fi
+    #     if [ -z "$SECRET_EXISTS" ]; then
+    #       vault secrets enable -path $PKI_NAME pki
+    #       vault secrets tune -max-lease-ttl=87600h $PKI_NAME
+    #     else
+    #       echo "!!$PKI_NAME already exists!!"
+    #     fi
 
-        now=$(date +'%Y%m%d-%H%M%S')
-        issuer_name="root-ca-$now"
+    #     now=$(date +'%Y%m%d-%H%M%S')
+    #     issuer_name="root-ca-$now"
 
-        vault write -field=certificate $PKI_NAME/root/generate/internal \
-          common_name=${{ inputs.common_name }} \
-          issuer_name="$issuer_name" \
-          ttl=87600h > $TEMP_JOB_DIR/$issuer_name.crt
+    #     vault write -field=certificate $PKI_NAME/root/generate/internal \
+    #       common_name=${{ inputs.common_name }} \
+    #       issuer_name="$issuer_name" \
+    #       ttl=87600h > $TEMP_JOB_DIR/$issuer_name.crt
 
-        vault write $PKI_NAME/config/urls \
-          issuing_certificates="$VAULT_ADDR/v1/$PKI_NAME/ca" \
-          crl_distribution_points="$VAULT_ADDR/v1/$PKI_NAME/crl"
+    #     vault write $PKI_NAME/config/urls \
+    #       issuing_certificates="$VAULT_ADDR/v1/$PKI_NAME/ca" \
+    #       crl_distribution_points="$VAULT_ADDR/v1/$PKI_NAME/crl"
 
-        vault write $PKI_NAME/roles/$PKI_NAME-dot-com-root \
-         allow_any_name=true
+    #     vault write $PKI_NAME/roles/$PKI_NAME-dot-com-root \
+    #      allow_any_name=true
 
-        echo "root_ca=$TEMP_JOB_DIR/$issuer_name.crt" >> $GITHUB_OUTPUT
-        echo "root_sign_address=$PKI_NAME/root" >> $GITHUB_OUTPUT
-        echo "root_ca_date=$now" >> $GITHUB_OUTPUT
-        echo "root_issuer_name=$issuer_name" >> $GITHUB_OUTPUT
+    #     echo "root_ca=$TEMP_JOB_DIR/$issuer_name.crt" >> $GITHUB_OUTPUT
+    #     echo "root_sign_address=$PKI_NAME/root" >> $GITHUB_OUTPUT
+    #     echo "root_ca_date=$now" >> $GITHUB_OUTPUT
+    #     echo "root_issuer_name=$issuer_name" >> $GITHUB_OUTPUT
 
-    - shell: sh
-      name: Configure vault issuer certificate intermediate
-      run: |
-        PKI_NAME="$(echo ${{ inputs.common_name }} | sed 's/\./-/g')_intermediate"
+    # - shell: sh
+    #   name: Configure vault issuer certificate intermediate
+    #   run: |
+    #     PKI_NAME="$(echo ${{ inputs.common_name }} | sed 's/\./-/g')_intermediate"
 
-        root_sign_address=${{ steps.configure-issuer-ca.outputs.root_sign_address }}
-        root_issuer_name=${{ steps.configure-issuer-ca.outputs.root_issuer_name }}
-        root_issuer_date=${{ steps.configure-issuer-ca.outputs.root_ca_date }}
+    #     root_sign_address=${{ steps.configure-issuer-ca.outputs.root_sign_address }}
+    #     root_issuer_name=${{ steps.configure-issuer-ca.outputs.root_issuer_name }}
+    #     root_issuer_date=${{ steps.configure-issuer-ca.outputs.root_ca_date }}
         
-        SECRET_EXISTS=$(vault secrets list | grep "$PKI_NAME" || true)
+    #     SECRET_EXISTS=$(vault secrets list | grep "$PKI_NAME" || true)
 
-        if [ -z "$SECRET_EXISTS" ]; then
-          vault secrets enable -path $PKI_NAME pki
-          vault secrets tune -max-lease-ttl=43800h $PKI_NAME
-        else
-          echo "!!$PKI_NAME already exists!!"
-        fi
+    #     if [ -z "$SECRET_EXISTS" ]; then
+    #       vault secrets enable -path $PKI_NAME pki
+    #       vault secrets tune -max-lease-ttl=43800h $PKI_NAME
+    #     else
+    #       echo "!!$PKI_NAME already exists!!"
+    #     fi
 
-        vault write -format=json $PKI_NAME/intermediate/generate/internal \
-          common_name="${{ inputs.common_name }} Intermediate Authority" \
-          issuer_name="$PKI_NAME"-intermediate-$root_ca_date \
-          | jq -r '.data.csr' > $TEMP_JOB_DIR/intermediate.csr
+    #     vault write -format=json $PKI_NAME/intermediate/generate/internal \
+    #       common_name="${{ inputs.common_name }} Intermediate Authority" \
+    #       issuer_name="$PKI_NAME"-intermediate-$root_ca_date \
+    #       | jq -r '.data.csr' > $TEMP_JOB_DIR/intermediate.csr
 
-        vault write -format=json $root_sign_address/sign-intermediate \
-          issuer_ref="$root_issuer_name" \
-          csr=@$TEMP_JOB_DIR/intermediate.csr \
-          format=pem_bundle ttl="43800h" \
-          | jq -r '.data.certificate' > $TEMP_JOB_DIR/intermediate.cert.pem
+    #     vault write -format=json $root_sign_address/sign-intermediate \
+    #       issuer_ref="$root_issuer_name" \
+    #       csr=@$TEMP_JOB_DIR/intermediate.csr \
+    #       format=pem_bundle ttl="43800h" \
+    #       | jq -r '.data.certificate' > $TEMP_JOB_DIR/intermediate.cert.pem
 
-        vault write $PKI_NAME/intermediate/set-signed \
-          certificate=@$TEMP_JOB_DIR/intermediate.cert.pem
+    #     vault write $PKI_NAME/intermediate/set-signed \
+    #       certificate=@$TEMP_JOB_DIR/intermediate.cert.pem
 
-        vault write $PKI_NAME/roles/$PKI_NAME-dot-com \
-          issuer_ref="$(vault read -field=default $PKI_NAME/config/issuers)" \
-          allowed_domains="${{ inputs.common_name }}" \
-          allow_bare_domains=true \
-          allow_subdomains=true \
-          require_cn=false \
-          max_ttl=72h
+    #     vault write $PKI_NAME/roles/$PKI_NAME-dot-com \
+    #       issuer_ref="$(vault read -field=default $PKI_NAME/config/issuers)" \
+    #       allowed_domains="${{ inputs.common_name }}" \
+    #       allow_bare_domains=true \
+    #       allow_subdomains=true \
+    #       require_cn=false \
+    #       max_ttl=72h
 
     - shell: sh
       name: Configure flux-reader
