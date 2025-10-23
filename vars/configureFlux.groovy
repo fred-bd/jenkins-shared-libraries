@@ -53,7 +53,7 @@ def call(body) {
               vaultAddr: vault_addr
             ]]) {
               script {
-                kubeconfig = fileUtils.runSHScriptWithReturn(
+                env.KUBECONFIG = fileUtils.runSHScriptWithReturn(
                   ["secret_key":"${kubefileSecret}", "kv_engine_path":"${kubefilePath}"], 
                   'flux-scripts/configure-kubeconfig.sh'
                 )
@@ -63,9 +63,9 @@ def call(body) {
         }
 
       stage('Test') {
-        environment {
-          KUBECONFIG = "${kubeconfig}"
-        }
+        // environment {
+        //   KUBECONFIG = "${kubeconfig}"
+        // }
 
         steps {
           sh 'kubectl get po -A'
