@@ -10,8 +10,6 @@ def call(body) {
   body.delegate = config
   body()
 
-  printl
-
   def vault_cred = config.credentialId
   // def folder = config.folder
   // def branch = config.branch ?: 'main'
