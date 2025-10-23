@@ -55,32 +55,32 @@ runs:
       shell: sh
       id: configure-approle-kubeauth
       run: |
-        APPROLE_NAME="kubeauth"
-        APPROLE_EXISTS=$(vault auth list | grep "$APPROLE_NAME" || true)
+        # APPROLE_NAME="kubeauth"
+        # APPROLE_EXISTS=$(vault auth list | grep "$APPROLE_NAME" || true)
 
-        if [ -z "$APPROLE_EXISTS" ]; then
-          vault auth enable -path="$APPROLE_NAME" approle
-        else
-          echo "!!$APPROLE_NAME already exists!!"
-        fi
+        # if [ -z "$APPROLE_EXISTS" ]; then
+        #   vault auth enable -path="$APPROLE_NAME" approle
+        # else
+        #   echo "!!$APPROLE_NAME already exists!!"
+        # fi
 
-        policies="${{ steps.kubeauth-policies.outputs.policies }}"
+        # policies="${{ steps.kubeauth-policies.outputs.policies }}"
 
-        vault write auth/$APPROLE_NAME/role/configurer \
-          token_policies=$policies \
-          secret_id_ttl=0 \
-          token_num_uses=0 \
-          token_ttl=4h \
-          token_max_ttl=8h \
-          secret_id_num_uses=0
+        # vault write auth/$APPROLE_NAME/role/configurer \
+        #   token_policies=$policies \
+        #   secret_id_ttl=0 \
+        #   token_num_uses=0 \
+        #   token_ttl=4h \
+        #   token_max_ttl=8h \
+        #   secret_id_num_uses=0
 
-        approle_id=$(vault read auth/$APPROLE_NAME/role/configurer/role-id -format=json | jq -r .data.role_id)
-        secret_id=$(vault write -force auth/$APPROLE_NAME/role/configurer/secret-id -format=json | jq -r .data.secret_id)
+        # approle_id=$(vault read auth/$APPROLE_NAME/role/configurer/role-id -format=json | jq -r .data.role_id)
+        # secret_id=$(vault write -force auth/$APPROLE_NAME/role/configurer/secret-id -format=json | jq -r .data.secret_id)
 
-        echo "::add-mask::$secret_id"
+        # echo "::add-mask::$secret_id"
 
-        echo "kubeapprole_id=$approle_id" >> $GITHUB_OUTPUT
-        echo "kubesecret_id=$secret_id" >> $GITHUB_OUTPUT
+        # echo "kubeapprole_id=$approle_id" >> $GITHUB_OUTPUT
+        # echo "kubesecret_id=$secret_id" >> $GITHUB_OUTPUT
 
     - shell: sh
       name: Configure vault issuer certificate Root CA

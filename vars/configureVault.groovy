@@ -20,6 +20,7 @@ def call(body) {
   // def imageTag = params.Tag
   def vault_addr = params.VaultAddr
   def policies
+  def kubeauth_approle
   // def registryCredentials = params.RegistryCredentials
   // def pushToRegistry = params.Push
   // def scanImage = params.Scan
@@ -63,7 +64,7 @@ def call(body) {
       stage('Configure a approle for kubernetes auth method') {
         steps {
           script {
-            println "testing: ${policies}"
+            kubeauth_approle = fileUtils.runSHScriptWithReturn(["policies": "${policies}"], 'vault-scripts/configure-kubeauth.sh')
           }
         }
       }
