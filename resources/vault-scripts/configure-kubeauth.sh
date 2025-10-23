@@ -5,7 +5,9 @@ APPROLE_NAME="kubeauth"
 APPROLE_EXISTS=$(vault auth list | grep "$APPROLE_NAME" || true)
 
 if [ -z "$APPROLE_EXISTS" ]; then
-  vault auth enable -path="$APPROLE_NAME" approle > /dev/null 2>&1
+  vault auth enable -path="$APPROLE_NAME" approle
+else
+  echo "Approle already defined"
 fi
 
 policies="$POLICIES"
@@ -16,9 +18,10 @@ vault write auth/$APPROLE_NAME/role/configurer \
   token_num_uses=0 \
   token_ttl=4h \
   token_max_ttl=8h \
-  secret_id_num_uses=0 > /dev/null 2>&1
+  secret_id_num_uses=0 
 
-approle_id=$(vault read auth/$APPROLE_NAME/role/configurer/role-id -format=json | jq -r .data.role_id)
-secret_id=$(vault write -force auth/$APPROLE_NAME/role/configurer/secret-id -format=json | jq -r .data.secret_id)
+echo "$policies"
+# approle_id=$(vault read auth/$APPROLE_NAME/role/configurer/role-id -format=json | jq -r .data.role_id)
+# secret_id=$(vault write -force auth/$APPROLE_NAME/role/configurer/secret-id -format=json | jq -r .data.secret_id)
 
-echo "id=$approle_id,secret=$secret_id" 
+# echo "id=$approle_id,secret=$secret_id" 

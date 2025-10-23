@@ -64,9 +64,7 @@ def call(body) {
       stage('Configure a approle for kubernetes auth method') {
         steps {
           script {
-            kubeauth_approle = fileUtils.runSHScriptWithReturn(["policies": "${policies}"], 'vault-scripts/configure-kubeauth.sh')
-
-            println "approle: ${kubeauth_approle}"
+            fileUtils.runSHScript(["policies": "${policies}"], 'vault-scripts/configure-kubeauth.sh')
           }
         }
       }
