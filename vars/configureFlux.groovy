@@ -13,6 +13,7 @@ def call(body) {
   def vault_addr = params.VaultAddr
   def kubefilePath = params.KubeFilePath
   def kubefileSecret = params.KubeFileSecret
+  def kubeconfig
 
   // def secrets = [
   //   [path: "${kubefilePath}", engineVersion: 2, secretValues: [
@@ -52,8 +53,7 @@ def call(body) {
               vaultAddr: vault_addr
             ]]) {
               script {
-                // policies = 
-                fileUtils.runSHScript(
+                kubeconfig = fileUtils.runSHScriptWithReturn(
                   ["secret_key":"${kubefileSecret}", "kv_engine_path":"${kubefilePath}"], 
                   'flux-scripts/configure-kubeconfig.sh'
                 )
@@ -62,12 +62,15 @@ def call(body) {
           }
         }
 
-      // stage('Test 2') {
+      stage('Test') {
+        environment {
+          KUBECONFIG = "${kubeconfig}"
+        }
 
-      //   steps {
-      //     sh 'cat kubeconfig.local'
-      //   }
-      // }
+        steps {
+          sh 'kubectl get po -A'
+        }
+      }
     }
   }
 }

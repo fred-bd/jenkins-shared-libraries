@@ -7,6 +7,4 @@ vault kv get \
   -field=$SECRET_KEY \
   $KV_ENGINE_PATH > kube-config
 
-echo "Trying to access kubernetes"
-
-kubectl get po -A --kubeconfig kube-config
+echo "$PWD/kube-config"
