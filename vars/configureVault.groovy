@@ -19,6 +19,7 @@ def call(body) {
   // def imageName = params.Name
   // def imageTag = params.Tag
   def vault_addr = params.VaultAddr
+  def common_name = params.CommonName
   def policies
   def kubeauth_approle
   // def registryCredentials = params.RegistryCredentials
@@ -65,6 +66,14 @@ def call(body) {
         steps {
           script {
             fileUtils.runSHScript(["policies": "${policies}"], 'vault-scripts/configure-kubeauth.sh')
+          }
+        }
+      }
+
+      stage('Configure certificates issuer') {
+        steps {
+          script {
+            fileUtils.runSHScript(["common_name": "${common_name}"], 'vault-scripts/configure-kubeauth.sh')
           }
         }
       }
