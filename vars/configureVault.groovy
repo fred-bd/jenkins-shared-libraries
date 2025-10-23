@@ -73,7 +73,7 @@ def call(body) {
       stage('Configure certificates issuer') {
         steps {
           script {
-            fileUtils.runSHScript(["common_name": "${common_name}"], 'vault-scripts/configure-kubeauth.sh')
+            fileUtils.runSHScript(["common_name": "${common_name}"], 'vault-scripts/configure-certificates-issuer.sh')
           }
         }
       }
