@@ -2,7 +2,7 @@ import org.jenkinsci.plugins.workflow.cps.DSL
 
 def call(body) {
   // def gitUtils = new org.bede.apps.GitUtils()
-  // def filesUtils = new org.bede.apps.FilesUtils()
+  def filesUtils = new org.bede.apps.FilesUtils()
   // def credUtils = new org.bede.apps.CredentialsUtils()
 
   def config = [:]
@@ -41,9 +41,15 @@ def call(body) {
     // }
 
     stages {
-      stage('testing') {
+      stage('Vault login') {
         steps {
-          sh "echo fred"
+           withCredentials(
+            [[$class: 'VaultTokenCredentialBinding', 
+              credentialsId: 'vaulttoken', 
+              vaultAddr: 'https://localhost:8200'
+            ]]) {
+              sh "vault login $VAULT_TOKEN"
+            }
         }
       }
     }
