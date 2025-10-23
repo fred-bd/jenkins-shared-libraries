@@ -19,11 +19,11 @@ def call(body) {
   // def imageName = params.Name
   // def imageTag = params.Tag
   def vault_addr = params.VaultAddr
+  def policies
   // def registryCredentials = params.RegistryCredentials
   // def pushToRegistry = params.Push
   // def scanImage = params.Scan
 
-  println "ok: ${vault_cred}"
 
   // def dindPort
   // def containerName
@@ -55,7 +55,15 @@ def call(body) {
       stage('Configure the policies for certificates handling') {
         steps {
           script {
-            fileUtils.runSHScript([:], 'vault-scripts/configure-policies.sh')
+            policies = fileUtils.runSHScriptWithReturn([:], 'vault-scripts/configure-policies.sh')
+          }
+        }
+      }
+
+      stage('Configure a approle for kubernetes auth method') {
+        steps {
+          script {
+            println "testing: ${policies}"
           }
         }
       }

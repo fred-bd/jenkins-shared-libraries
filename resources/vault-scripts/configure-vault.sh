@@ -25,31 +25,31 @@ outputs:
 runs:
   using: 'composite'
   steps:
-    - name: Configure kube-auth jobs policies
-      shell: sh
-      id: kubeauth-policies
-      run: |
-        auth='auth-manager'
-        issuer='issuer-manager'
-        policy='policy-manager'
+    # - name: Configure kube-auth jobs policies
+    #   shell: sh
+    #   id: kubeauth-policies
+    #   run: |
+    #     auth='auth-manager'
+    #     issuer='issuer-manager'
+    #     policy='policy-manager'
 
-        cat <<EOF | vault policy write $auth -
-        path "sys/auth/*" { capabilities = ["create", "update", "sudo"] }
-        path "sys/auth"   { capabilities = ["read"] }
-        path "auth/*"     { capabilities = [ "update", "create" ] }
-        EOF
+    #     cat <<EOF | vault policy write $auth -
+    #     path "sys/auth/*" { capabilities = ["create", "update", "sudo"] }
+    #     path "sys/auth"   { capabilities = ["read"] }
+    #     path "auth/*"     { capabilities = [ "update", "create" ] }
+    #     EOF
 
-        cat <<EOF | vault policy write $policy -
-        path "sys/policies/*" { capabilities = [ "create", "update", "read", "list" ] }
-        EOF
+    #     cat <<EOF | vault policy write $policy -
+    #     path "sys/policies/*" { capabilities = [ "create", "update", "read", "list" ] }
+    #     EOF
 
-        cat <<EOF | vault policy write $issuer -
-        path "sys/mounts/*" { capabilities = [ "create", "read", "update", "delete", "list" ] }
-        path "sys/mounts" { capabilities = [ "read", "list" ] }
-        path "pki*" { capabilities = [ "create", "read", "update", "delete", "list", "sudo", "patch" ] }
-        EOF
+    #     cat <<EOF | vault policy write $issuer -
+    #     path "sys/mounts/*" { capabilities = [ "create", "read", "update", "delete", "list" ] }
+    #     path "sys/mounts" { capabilities = [ "read", "list" ] }
+    #     path "pki*" { capabilities = [ "create", "read", "update", "delete", "list", "sudo", "patch" ] }
+    #     EOF
 
-        echo "policies=$auth,$issuer,$policy" >> $GITHUB_OUTPUT
+    #     echo "policies=$auth,$issuer,$policy" >> $GITHUB_OUTPUT
 
     - name: Configure kubeauth approle for access from kubeauth jobs
       shell: sh
