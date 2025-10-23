@@ -52,7 +52,8 @@ def call(body) {
               vaultAddr: vault_addr
             ]]) {
               script {
-                policies = fileUtils.runSHScriptWithReturn(
+                // policies = 
+                fileUtils.runSHScript(
                   ["secret_key":"${kubefileSecret}", "kv_engine_path":"${kubefilePath}"], 
                   'flux-scripts/configure-kubeconfig.sh'
                 )
