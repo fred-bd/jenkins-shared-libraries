@@ -23,6 +23,8 @@ def call(body) {
   // def pushToRegistry = params.Push
   // def scanImage = params.Scan
 
+  println "ok: ${vault_cred}"
+
   // def dindPort
   // def containerName
   // def certsPath = '/home/jenkins/agent/.cert'
