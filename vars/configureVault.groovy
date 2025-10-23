@@ -10,7 +10,9 @@ def call(body) {
   body.delegate = config
   body()
 
-  def vault_addr = config.vaultAddr
+  printl
+
+  def vault_cred = config.credentialId
   // def folder = config.folder
   // def branch = config.branch ?: 'main'
   // def credentialId = config.credentialId
@@ -18,7 +20,7 @@ def call(body) {
 
   // def imageName = params.Name
   // def imageTag = params.Tag
-  // def artifactoryRegistry = params.Registry
+  def vaultAddr = params.VaultAddr
   // def registryCredentials = params.RegistryCredentials
   // def pushToRegistry = params.Push
   // def scanImage = params.Scan
