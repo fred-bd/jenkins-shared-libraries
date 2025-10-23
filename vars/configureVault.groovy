@@ -57,7 +57,7 @@ def call(body) {
 
       stage('Vault test') {
         environment {
-          VAULT_ADDR = vault_addr
+          VAULT_ADDR = "${vault_addr}"
         }
         steps {
           sh "vault secrets enable -path some-secret kv-v2"
