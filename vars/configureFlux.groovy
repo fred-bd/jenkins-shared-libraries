@@ -14,14 +14,14 @@ def call(body) {
   def kubefilePath = params.KubeFilePath
   def kubefileSecret = params.KubeFileSecret
 
-  def secrets = [
-    [path: "${kubefilePath}", engineVersion: 2, secretValues: [
-      [envVar: 'kubeconfig', vaultKey: "${kubefileSecret}" ]]]
-  ]
+  // def secrets = [
+  //   [path: "${kubefilePath}", engineVersion: 2, secretValues: [
+  //     [envVar: 'kubeconfig', vaultKey: "${kubefileSecret}" ]]]
+  // ]
 
-  def configuration = [vaultUrl: "${vault_addr}",
-                      vaultCredentialId: "${vault_cred}",
-                      engineVersion: 1]
+  // def configuration = [vaultUrl: "${vault_addr}",
+  //                     vaultCredentialId: "${vault_cred}",
+  //                     engineVersion: 1]
 
   pipeline {
     agent { label "${agent_label}" }
@@ -31,22 +31,41 @@ def call(body) {
     }
 
     stages {
-      stage('Test') {
+      // stage('Vault login') {
+      //   steps {
+      //      withCredentials(
+      //       [[$class: 'VaultTokenCredentialBinding', 
+      //         credentialsId: vault_cred, 
+      //         vaultAddr: vault_addr
+      //       ]]) {
+      //         sh "vault login $VAULT_TOKEN"
+      //       }
+      //   }
+      // }
 
-        steps {
-          // inside this block your credentials will be available as env variables
-          withVault([configuration: configuration, vaultSecrets: secrets]) {
-            sh 'echo $kubeconfig > kubeconfig.local'
+        stage('Configure kubeconfig file') {
+
+          steps {
+           withCredentials(
+            [[$class: 'VaultTokenCredentialBinding', 
+              credentialsId: vault_cred, 
+              vaultAddr: vault_addr
+            ]]) {
+              script {
+                policies = fileUtils.runSHScriptWithReturn(
+                  ["secret_key":"${kubefileSecret}", "kv_engine_path":"${kubefilePath}"], 
+                  'vault-scripts/configure-policies.sh'
+                )
+              }
           }
         }
-      }
 
-      stage('Test 2') {
+      // stage('Test 2') {
 
-        steps {
-          sh 'cat kubeconfig.local'
-        }
-      }
+      //   steps {
+      //     sh 'cat kubeconfig.local'
+      //   }
+      // }
     }
   }
 }
