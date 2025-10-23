@@ -54,7 +54,7 @@ def call(body) {
 
       stage('Configure the policies for certificates handling') {
         steps {
-          fileUtils.runSHScript([], 'vault-scripts/configure-policies.sh')
+          fileUtils.runSHScript([:], 'vault-scripts/configure-policies.sh')
         }
       }
     }
