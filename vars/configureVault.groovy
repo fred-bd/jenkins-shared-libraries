@@ -18,7 +18,7 @@ def call(body) {
 
   // def imageName = params.Name
   // def imageTag = params.Tag
-  def vaultAddr = params.VaultAddr
+  def vault_addr = params.VaultAddr
   // def registryCredentials = params.RegistryCredentials
   // def pushToRegistry = params.Push
   // def scanImage = params.Scan
@@ -45,7 +45,7 @@ def call(body) {
         steps {
            withCredentials(
             [[$class: 'VaultTokenCredentialBinding', 
-              credentialsId: 'vaultAdminToken', 
+              credentialsId: vault_cred, 
               vaultAddr: vault_addr
             ]]) {
               sh "vault login $VAULT_TOKEN"
