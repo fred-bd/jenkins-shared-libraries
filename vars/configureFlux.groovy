@@ -13,7 +13,15 @@ def call(body) {
   def vault_addr = params.VaultAddr
   def kubefilePath = params.KubeFilePath
   def kubefileSecret = params.KubeFileSecret
-  def policies
+
+  def secrets = [
+    [path: "${kubefilePath}", engineVersion: 2, secretValues: [
+      [envVar: 'kubeconfig', vaultKey: "${kubefileSecret}" ]]]
+  ]
+
+  def configuration = [vaultUrl: "${vault_addr}",
+                      vaultCredentialId: "${vault_cred}",
+                      engineVersion: 1]
 
   pipeline {
     agent { label "${agent_label}" }
@@ -24,14 +32,6 @@ def call(body) {
 
     stages {
       stage('Test') {
-          def secrets = [
-            [path: "${kubefilePath}", engineVersion: 2, secretValues: [
-              [envVar: 'kubeconfig', vaultKey: "${kubefileSecret}" ]]]
-          ]
-
-          def configuration = [vaultUrl: "${vault_addr}",
-                              vaultCredentialId: "${vault_cred}",
-                              engineVersion: 2]
 
         steps {
           // inside this block your credentials will be available as env variables
