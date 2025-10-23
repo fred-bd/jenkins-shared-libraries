@@ -2,7 +2,7 @@ import org.jenkinsci.plugins.workflow.cps.DSL
 
 def call(body) {
   // def gitUtils = new org.bede.apps.GitUtils()
-  def filesUtils = new org.bede.apps.FileUtils()
+  def fileUtils = new org.bede.apps.FileUtils()
   // def credUtils = new org.bede.apps.CredentialsUtils()
 
   def config = [:]
@@ -35,12 +35,9 @@ def call(body) {
   pipeline {
     agent { label 'kube-agent' }
 
-    // environment {
-    //   DOCKER_CERT_PATH = "${certsPath}"
-    //   DOCKER_TLS_VERIFY=1
-    //   DOCKER_TLS=1
-    //   DOCKER_CONFIG = "/tmp/.docker"
-    // }
+    environment {
+      VAULT_ADDR = "${vault_addr}"
+    }
 
     stages {
       stage('Vault login') {
@@ -55,12 +52,9 @@ def call(body) {
         }
       }
 
-      stage('Vault test') {
-        environment {
-          VAULT_ADDR = "${vault_addr}"
-        }
+      stage('Configure the policies for certificates handling') {
         steps {
-          sh "vault secrets enable -path some-secret kv-v2"
+          fileUtils.runSHScript([], 'vault-scripts/configure-policies.sh')
         }
       }
     }
