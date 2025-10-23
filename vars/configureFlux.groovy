@@ -13,16 +13,6 @@ def call(body) {
   def vault_addr = params.VaultAddr
   def kubefilePath = params.KubeFilePath
   def kubefileSecret = params.KubeFileSecret
-  def kubeconfig
-
-  // def secrets = [
-  //   [path: "${kubefilePath}", engineVersion: 2, secretValues: [
-  //     [envVar: 'kubeconfig', vaultKey: "${kubefileSecret}" ]]]
-  // ]
-
-  // def configuration = [vaultUrl: "${vault_addr}",
-  //                     vaultCredentialId: "${vault_cred}",
-  //                     engineVersion: 1]
 
   pipeline {
     agent { label "${agent_label}" }
@@ -32,41 +22,25 @@ def call(body) {
     }
 
     stages {
-      // stage('Vault login') {
-      //   steps {
-      //      withCredentials(
-      //       [[$class: 'VaultTokenCredentialBinding', 
-      //         credentialsId: vault_cred, 
-      //         vaultAddr: vault_addr
-      //       ]]) {
-      //         sh "vault login $VAULT_TOKEN"
-      //       }
-      //   }
-      // }
+      stage('Configure kubeconfig file') {
 
-        stage('Configure kubeconfig file') {
-
-          steps {
-           withCredentials(
-            [[$class: 'VaultTokenCredentialBinding', 
-              credentialsId: vault_cred, 
-              vaultAddr: vault_addr
-            ]]) {
-              script {
-                env.KUBECONFIG = fileUtils.runSHScriptWithReturn(
-                  ["secret_key":"${kubefileSecret}", "kv_engine_path":"${kubefilePath}"], 
-                  'flux-scripts/configure-kubeconfig.sh'
-                )
-              }
+        steps {
+          withCredentials(
+          [[$class: 'VaultTokenCredentialBinding', 
+            credentialsId: vault_cred, 
+            vaultAddr: vault_addr
+          ]]) {
+            script {
+              env.KUBECONFIG = fileUtils.runSHScriptWithReturn(
+                ["secret_key":"${kubefileSecret}", "kv_engine_path":"${kubefilePath}"], 
+                'flux-scripts/configure-kubeconfig.sh'
+              )
             }
           }
         }
+      }
 
       stage('Test') {
-        // environment {
-        //   KUBECONFIG = "${kubeconfig}"
-        // }
-
         steps {
           sh 'kubectl get po -A'
         }
