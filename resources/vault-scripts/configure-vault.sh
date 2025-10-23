@@ -157,39 +157,39 @@ runs:
     #       require_cn=false \
     #       max_ttl=72h
 
-    - shell: sh
-      name: Configure flux-reader
-      id: configure-approle-flux
-      run: |
-        APPROLE_NAME="flux"
-        APPROLE_EXISTS=$(vault auth list | grep "$APPROLE_NAME" || true)
-        ROLE_POLICY=$APPROLE_NAME"-read"
-        READER_POLICY=$APPROLE_NAME"-reader"
+    # - shell: sh
+    #   name: Configure flux-reader
+    #   id: configure-approle-flux
+    #   run: |
+    #     APPROLE_NAME="flux"
+    #     APPROLE_EXISTS=$(vault auth list | grep "$APPROLE_NAME" || true)
+    #     ROLE_POLICY=$APPROLE_NAME"-read"
+    #     READER_POLICY=$APPROLE_NAME"-reader"
 
-        if [ -z "$APPROLE_EXISTS" ]; then
-          vault auth enable -path="$APPROLE_NAME" approle
-        else
-          echo "!!$APPROLE_NAME already exists!!"
-        fi
+    #     if [ -z "$APPROLE_EXISTS" ]; then
+    #       vault auth enable -path="$APPROLE_NAME" approle
+    #     else
+    #       echo "!!$APPROLE_NAME already exists!!"
+    #     fi
 
-        cat <<EOF | vault policy write $ROLE_POLICY -
-        path "cluster-hosts/*" { capabilities = [ "read", "list" ] }
-        path "github-access/*" { capabilities = [ "read", "list" ] }
-        path "helm-repo-credentials/*" { capabilities = [ "read", "list" ] }
-        EOF
+    #     cat <<EOF | vault policy write $ROLE_POLICY -
+    #     path "cluster-hosts/*" { capabilities = [ "read", "list" ] }
+    #     path "github-access/*" { capabilities = [ "read", "list" ] }
+    #     path "helm-repo-credentials/*" { capabilities = [ "read", "list" ] }
+    #     EOF
 
-        vault write auth/$APPROLE_NAME/role/$READER_POLICY \
-          token_policies=$ROLE_POLICY \
-          secret_id_ttl=0 \
-          token_num_uses=0 \
-          token_ttl=4h \
-          token_max_ttl=8h \
-          secret_id_num_uses=0
+    #     vault write auth/$APPROLE_NAME/role/$READER_POLICY \
+    #       token_policies=$ROLE_POLICY \
+    #       secret_id_ttl=0 \
+    #       token_num_uses=0 \
+    #       token_ttl=4h \
+    #       token_max_ttl=8h \
+    #       secret_id_num_uses=0
 
-        approle_id=$(vault read auth/$APPROLE_NAME/role/$READER_POLICY/role-id -format=json | jq -r .data.role_id)
-        secret_id=$(vault write -force auth/$APPROLE_NAME/role/$READER_POLICY/secret-id -format=json | jq -r .data.secret_id)
+    #     approle_id=$(vault read auth/$APPROLE_NAME/role/$READER_POLICY/role-id -format=json | jq -r .data.role_id)
+    #     secret_id=$(vault write -force auth/$APPROLE_NAME/role/$READER_POLICY/secret-id -format=json | jq -r .data.secret_id)
 
-        echo "::add-mask::$secret_id"
+    #     echo "::add-mask::$secret_id"
 
-        echo "fluxapprole_id=$approle_id" >> $GITHUB_OUTPUT
-        echo "fluxsecret_id=$secret_id" >> $GITHUB_OUTPUT
+    #     echo "fluxapprole_id=$approle_id" >> $GITHUB_OUTPUT
+    #     echo "fluxsecret_id=$secret_id" >> $GITHUB_OUTPUT
