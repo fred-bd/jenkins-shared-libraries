@@ -54,6 +54,12 @@ def call(body) {
             }
         }
       }
+
+      stage('Vault test') {
+        steps {
+          sh "vault secrets enable -path some-secret kv-v2"
+        }
+      }
     }
       
     //   stage('Get dind server name') {
