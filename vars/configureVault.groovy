@@ -9,12 +9,13 @@ def call(body) {
   body()
 
   def vault_cred = config.credentialId
+  def agent_label = config.agentName
   def vault_addr = params.VaultAddr
   def common_name = params.CommonName
   def policies
 
   pipeline {
-    agent { label 'kube-agent' }
+    agent { label "${agent_label}" }
 
     environment {
       VAULT_ADDR = "${vault_addr}"
