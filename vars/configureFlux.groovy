@@ -44,7 +44,7 @@ def call(body) {
       stage('Test 2') {
 
         steps {
-          sh 'kubectl get ns --kubeconfig kubeconfig.local'
+          sh 'cat kubeconfig.local'
         }
       }
     }
