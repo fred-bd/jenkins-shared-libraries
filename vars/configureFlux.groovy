@@ -24,7 +24,6 @@ def call(body) {
 
     stages {
       stage('Test') {
-        steps {
           def secrets = [
             [path: "${kubefilePath}", engineVersion: 2, secretValues: [
               [envVar: 'kubeconfig', vaultKey: "${kubefileSecret}" ]]]
@@ -33,6 +32,8 @@ def call(body) {
           def configuration = [vaultUrl: "${vault_addr}",
                               vaultCredentialId: "${vault_cred}",
                               engineVersion: 2]
+
+        steps {
           // inside this block your credentials will be available as env variables
           withVault([configuration: configuration, vaultSecrets: secrets]) {
               sh 'cat $kubeconfig'
