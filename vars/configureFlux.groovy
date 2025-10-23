@@ -57,6 +57,7 @@ def call(body) {
                   'vault-scripts/configure-policies.sh'
                 )
               }
+            }
           }
         }
 
