@@ -2,7 +2,7 @@ import org.jenkinsci.plugins.workflow.cps.DSL
 
 def call(body) {
   // def gitUtils = new org.bede.apps.GitUtils()
-  def filesUtils = new org.bede.apps.FilesUtils()
+  def filesUtils = new org.bede.apps.FileUtils()
   // def credUtils = new org.bede.apps.CredentialsUtils()
 
   def config = [:]
