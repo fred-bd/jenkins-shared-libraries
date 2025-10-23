@@ -36,8 +36,15 @@ def call(body) {
         steps {
           // inside this block your credentials will be available as env variables
           withVault([configuration: configuration, vaultSecrets: secrets]) {
-              sh 'cat $kubeconfig'
+            sh 'echo $kubeconfig > kubeconfig.local'
           }
+        }
+      }
+
+      stage('Test 2') {
+
+        steps {
+          sh 'kubectl get ns --kubeconfig kubeconfig.local'
         }
       }
     }
