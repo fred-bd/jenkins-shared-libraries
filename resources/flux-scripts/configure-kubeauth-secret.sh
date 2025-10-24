@@ -23,5 +23,5 @@ metadata:
 type: Opaque
 stringData:
   approle-id: $approle_id
-  secret-id: $approle_secret
+  secret-id: $secret_id
 EOF
