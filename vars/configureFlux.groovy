@@ -13,6 +13,8 @@ def call(body) {
   def vault_addr = params.VaultAddr
   def kubefilePath = params.KubeFilePath
   def kubefileSecret = params.KubeFileSecret
+  def ns_replication = params.KubeAuthNs
+  def cleanAll = params.CleanFluxResources
 
   pipeline {
     agent { label "${agent_label}" }
@@ -40,9 +42,30 @@ def call(body) {
         }
       }
 
-      stage('Test') {
+      stage('Clean cluster') {
+        when {
+          expression { cleanAll == true }
+        }
+
         steps {
-          sh 'kubectl get po -A'
+          script { fileUtils.runSHScript([:], 'flux-scripts/clean-cluster.sh') }
+        }
+      }
+
+      stage('Configure kubeauth authentication secret') {
+
+        steps {
+          withCredentials(
+          [[$class: 'VaultTokenCredentialBinding', 
+            credentialsId: vault_cred, 
+            vaultAddr: vault_addr
+          ]]) {
+            script {
+              env.KUBECONFIG = fileUtils.runSHScriptWithReturn(
+                ["ns_to_replicate":"${ns_replications}"], 'flux-scripts/configure-kubeauth-secret.sh'
+              )
+            }
+          }
         }
       }
     }
