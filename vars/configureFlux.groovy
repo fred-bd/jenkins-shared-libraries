@@ -19,6 +19,7 @@ def call(body) {
   def kubefileSecret = params.KubeFileSecret
   def ns_replication = params.KubeAuthNs
   def cleanAll = params.CleanFluxResources
+  def shardEnabled = params.ConfigureSharding
   def clustersRepo = params.FluxConfigRepo 
   def clustersRepoPath = params.FluxConfigRepoPath
 
@@ -99,29 +100,29 @@ def call(body) {
         }
       }
 
-      stage('test') {
+      stage('Configure Flux sharding') {
+
+        when {
+          expression { shardEnabled == true }
+        }
 
         steps {
           script {
-            sh "ls -l ${fluxManifestsDir}"
-            // def secrets = [
-            //   [path: "${helmSecretPath}", engineVersion: 2, secretValues: [
-            //     [envVar: 'user', vaultKey: "${helmUserKey}"],
-            //     [envVar: 'pass', vaultKey: "${helmPasswordKey}"]]]
-            // ]
+            def shParams = [ 'flux_manifests_dir' : fluxManifestsDir ]
+            fileUtils.runSHScript(shParams, 'flux-scripts/configure-flux-sharding.sh') 
+          }
+        }
+      }
 
-            // def configuration = [vaultUrl: vault_addr, vaultCredentialId: vault_cred, engineVersion: 1]
+      stage('Deploy Flux') {
 
-            // withVault([configuration: configuration, vaultSecrets: secrets]) {
-            //   def shParams = [
-            //     'helm_artifact_user' : user,
-            //     'helm_artifact_password' : pass,
-            //     'cluster_config_repository' : clustersRepo,
-            //     'cluster_config_path' : clustersRepoPath 
-            //   ]
+        when {
+          expression { shardEnabled == true }
+        }
 
-            //   fluxManifestsDir = fileUtils.runSHScriptWithReturn(shParams, 'flux-scripts/generate-flux-manifests.sh') 
-            // }
+        steps {
+          script {
+            sh "kubectl apply -k ${fluxManifestsDir}"
           }
         }
       }

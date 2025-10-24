@@ -11,7 +11,7 @@ manifests_dir="$manifests_base/base"
 
 mkdir -p $manifests_dir
 
-# We need not secrets since the repos are public
+# We don't need secrets since the repos are public
 # ---------------------------------------------
 # flux create secret git applications-repo-secret \
 #   --url=ssh://${{ inputs.foundation-infra-repository }} \
@@ -69,5 +69,13 @@ kubectl kustomize $manifests_dir -o $manifests_dir/../flux-config.yaml
 
 flux install \
   --export > $manifests_dir/../flux-deploy.yaml
+
+cat <<EOF > $manifests_dir/../kustomization.yaml
+apiVersion: kustomize.config.k8s.io/v1beta1
+namespace: flux-system
+resources:
+- flux-config.yaml
+- flux-deploy.yaml
+EOF
 
 echo "$manifests_base"
