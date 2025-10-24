@@ -60,7 +60,7 @@ def call(body) {
             credentialsId: vault_cred, 
             vaultAddr: vault_addr
           ]]) {
-            script { fileUtils.runSHScript(["ns_to_replicate":"${ns_replications}"], 'flux-scripts/configure-kubeauth-secret.sh') }
+            script { fileUtils.runSHScript(["ns_to_replicate":"${ns_replication}"], 'flux-scripts/configure-kubeauth-secret.sh') }
           }
         }
       }
