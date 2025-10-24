@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Get kubeconfig file
-vault login $VAULT_TOKEN -no-print
+vault -no-print login $VAULT_TOKEN
 
 vault kv get \
   -field=$SECRET_KEY \

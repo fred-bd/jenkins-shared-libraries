@@ -3,7 +3,7 @@
 APPROLE_NAME="kubeauth"
 
 # Get kubeconfig file
-vault login $VAULT_TOKEN -no-print
+vault  -no-print login $VAULT_TOKEN
 
 approle_id=$(vault read auth/$APPROLE_NAME/role/configurer/role-id -format=json | jq -r .data.role_id)
 secret_id=$(vault write -force auth/$APPROLE_NAME/role/configurer/secret-id -format=json | jq -r .data.secret_id)
