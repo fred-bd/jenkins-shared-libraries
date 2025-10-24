@@ -91,7 +91,7 @@ def call(body) {
                 'cluster_config_path' : clustersRepoPath 
               ]
 
-              fileUtils.runSHScript(shParams, 'flux-scripts/generateFluxManifests.sh') 
+              fileUtils.runSHScript(shParams, 'flux-scripts/generate-flux-manifests.sh') 
             }
           }
         }
