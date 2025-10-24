@@ -72,7 +72,6 @@ flux install \
 
 cat <<EOF > $manifests_dir/../kustomization.yaml
 apiVersion: kustomize.config.k8s.io/v1beta1
-namespace: flux-system
 resources:
 - flux-config.yaml
 - flux-deploy.yaml
