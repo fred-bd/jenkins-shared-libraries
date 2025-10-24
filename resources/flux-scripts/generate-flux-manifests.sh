@@ -11,9 +11,6 @@ manifests_dir="$manifests_base/base"
 
 mkdir -p $manifests_dir
 
-echo "manifests_dir=$manifests_dir" >> $GITHUB_OUTPUT
-echo "flux_resources=$TEMP_JOB_DIR/flux-manifests" >> $GITHUB_OUTPUT
-
 # We need not secrets since the repos are public
 # ---------------------------------------------
 # flux create secret git applications-repo-secret \
