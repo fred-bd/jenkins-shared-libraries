@@ -115,11 +115,6 @@ def call(body) {
       }
 
       stage('Deploy Flux') {
-
-        when {
-          expression { shardEnabled == true }
-        }
-
         steps {
           script {
             sh "kubectl apply -k ${fluxManifestsDir}"
