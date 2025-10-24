@@ -22,6 +22,8 @@ def call(body) {
   def clustersRepo = params.FluxConfigRepo 
   def clustersRepoPath = params.FluxConfigRepoPath
 
+  def fluxManifestsDir
+
   pipeline {
     agent { label "${agent_label}" }
 
@@ -91,8 +93,35 @@ def call(body) {
                 'cluster_config_path' : clustersRepoPath 
               ]
 
-              fileUtils.runSHScript(shParams, 'flux-scripts/generate-flux-manifests.sh') 
+              fluxManifestsDir = fileUtils.runSHScriptWithReturn(shParams, 'flux-scripts/generate-flux-manifests.sh') 
             }
+          }
+        }
+      }
+
+      stage('test') {
+
+        steps {
+          script {
+            sh "ls -l ${fluxManifestsDir}"
+            // def secrets = [
+            //   [path: "${helmSecretPath}", engineVersion: 2, secretValues: [
+            //     [envVar: 'user', vaultKey: "${helmUserKey}"],
+            //     [envVar: 'pass', vaultKey: "${helmPasswordKey}"]]]
+            // ]
+
+            // def configuration = [vaultUrl: vault_addr, vaultCredentialId: vault_cred, engineVersion: 1]
+
+            // withVault([configuration: configuration, vaultSecrets: secrets]) {
+            //   def shParams = [
+            //     'helm_artifact_user' : user,
+            //     'helm_artifact_password' : pass,
+            //     'cluster_config_repository' : clustersRepo,
+            //     'cluster_config_path' : clustersRepoPath 
+            //   ]
+
+            //   fluxManifestsDir = fileUtils.runSHScriptWithReturn(shParams, 'flux-scripts/generate-flux-manifests.sh') 
+            // }
           }
         }
       }
