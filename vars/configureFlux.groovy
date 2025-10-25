@@ -117,7 +117,10 @@ def call(body) {
       stage('Deploy Flux') {
         steps {
           script {
-            sh "kubectl apply -k ${fluxManifestsDir}"
+            sh """
+              kubectl apply -f ${fluxManifestsDir}/flux-deploy.yaml
+              kubectl apply -f ${fluxManifestsDir}/flux-config.yaml
+            """
           }
         }
       }

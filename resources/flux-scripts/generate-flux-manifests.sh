@@ -70,11 +70,11 @@ kubectl kustomize $manifests_dir -o $manifests_dir/../flux-config.yaml
 flux install \
   --export > $manifests_dir/../flux-deploy.yaml
 
-cat <<EOF > $manifests_dir/../kustomization.yaml
-apiVersion: kustomize.config.k8s.io/v1beta1
-resources:
-- flux-config.yaml
-- flux-deploy.yaml
-EOF
+# cat <<EOF > $manifests_dir/../kustomization.yaml
+# apiVersion: kustomize.config.k8s.io/v1beta1
+# resources:
+# - flux-config.yaml
+# - flux-deploy.yaml
+# EOF
 
 echo "$manifests_base"
