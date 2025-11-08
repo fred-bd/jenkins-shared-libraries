@@ -3,10 +3,10 @@ import org.jenkinsci.plugins.workflow.cps.DSL
 def call(body) {
   // def fileUtils = new org.bede.apps.FileUtils()0
 
-  // def config = [:]
-  // body.resolveStrategy = Closure.DELEGATE_FIRST
-  // body.delegate = config
-  // body()
+  def config = [:]
+  body.resolveStrategy = Closure.DELEGATE_FIRST
+  body.delegate = config
+  body()
 
   // def vault_cred = config.credentialId
   // def agent_label = config.agentName
