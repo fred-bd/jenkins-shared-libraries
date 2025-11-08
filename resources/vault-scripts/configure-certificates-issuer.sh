@@ -26,11 +26,6 @@ vault write $PKI_NAME/config/urls \
 vault write $PKI_NAME/roles/$PKI_NAME-dot-com-root \
   allow_any_name=true
 
-# echo "root_ca=$TEMP_JOB_DIR/$issuer_name.crt" >> $GITHUB_OUTPUT
-# echo "root_sign_address=$PKI_NAME/root" >> $GITHUB_OUTPUT
-# echo "root_ca_date=$now" >> $GITHUB_OUTPUT
-# echo "root_issuer_name=$issuer_name" >> $GITHUB_OUTPUT
-
 # Configure vault issuer certificate intermediate
 PKI_NAME_I="$(echo $COMMON_NAME | sed 's/\./-/g')_intermediate"
 
