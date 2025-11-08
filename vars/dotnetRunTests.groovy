@@ -6,6 +6,8 @@ def call(body) {
   body.delegate = config
   body()
 
+  println "fred"
+
   pipeline {
     agent any
 
