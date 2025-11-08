@@ -35,6 +35,7 @@ def call(body) {
     stages {
       stage('test') {
         steps {
+          sh 'echo ok'
         }
       }
     }
