@@ -1,6 +1,6 @@
 package org.bede.apps;
 
-def getTextSecret(string credentialId) {
+def getTextSecret(String credentialId) {
 
   def result;
 
