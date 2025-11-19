@@ -21,7 +21,8 @@ def call(body) {
       stage('test') {
         steps {
           sh """
-            echo ${env.BRANCH_NAME}
+            echo $PWD
+            ls -la
           """
         }
       }
