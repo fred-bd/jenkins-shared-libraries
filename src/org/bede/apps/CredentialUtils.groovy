@@ -4,7 +4,7 @@ def getTextSecret(String credentialId) {
 
   def result;
 
-  withCredentials([string(credentialId: "${credentialId}", variable: 'RESULT')]) {
+  withCredentials([string(credentialsId: "${credentialId}", variable: 'RESULT')]) {
     result = "${RESULT}"
   }
 
