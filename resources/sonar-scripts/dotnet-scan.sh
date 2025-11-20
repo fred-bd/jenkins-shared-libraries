@@ -27,8 +27,8 @@ dotnet sonarscanner begin /k:"$PROJECT_ID" \
 dotnet build -c Release -o $OUT_DIR --no-incremental
 
 coverlet $OUT_DIR/unittests.dll \
-    --target "dotnet" \
-    --targetargs "test . --no-build" \
+    --target "dotnet -c Release" \
+    --targetargs "test --no-build" \
     -f=opencover \
     -o="coverage.xml"
 
