@@ -15,11 +15,7 @@
 
 # ls -la
 
-OUT_DIR="$PWD/release"
-
-OUTDIR=$(dotnet msbuild unittests -nologo -t:Build -property:Configuration=Release -getProperty:TargetDir)
-echo "Output directory: $OUTDIR"
-
+OUT_DIR=$(dotnet msbuild unittests -nologo -t:Build -property:Configuration=Debug -getProperty:TargetDir)
 
 dotnet sonarscanner begin /k:"$PROJECT_ID" \
     /d:sonar.token="$ACCESS_TOKEN" \
