@@ -28,15 +28,16 @@ dotnet sonarscanner begin /k:"$PROJECT_ID" \
 dotnet build -c Release -o $OUT_DIR --no-incremental
 # dotnet build --no-incremental
 
-echo '----'
-echo "out: $OUT_DIR"
-ls -la $OUT_DIR
-echo '----'
+# echo '----'
+# echo "out: $OUT_DIR"
+# ls -la $OUT_DIR
+# echo '----'
+ls -la $PWD/unittests
 
 coverlet $OUT_DIR/unittests.dll \
     --target "dotnet" \
-    --targetargs "test $PWD/unittests/unittests.csproj --no-build" \
+    --targetargs "test $PWD/unittests/unittests.csproj --no-build " \
     -f=opencover \
-    -o="coverage.xml"
+    -o="coverage.xml" --verbosity detailed
 
 dotnet sonarscanner end /d:sonar.token="$ACCESS_TOKEN"
