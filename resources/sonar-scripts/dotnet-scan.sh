@@ -36,7 +36,7 @@ ls -la $PWD/unittests
 
 coverlet $OUT_DIR/unittests.dll \
     --target "dotnet" \
-    --targetargs "test $PWD/unittests --no-build " \
+    --targetargs "test flux-micro-svc.sln --no-build " \
     -f=opencover \
     -o="coverage.xml" --verbosity detailed
 
