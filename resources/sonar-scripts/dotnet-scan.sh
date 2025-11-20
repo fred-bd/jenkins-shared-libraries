@@ -25,8 +25,8 @@ dotnet sonarscanner begin /k:"$PROJECT_ID" \
     # /d:sonar.pullrequest.branch="$BRANCH_NAME" \
     # /d:sonar.pullrequest.base="main"
 
-dotnet build -c Release -o $OUT_DIR --no-incremental
-# dotnet build --no-incremental
+# dotnet build -c Release -o $OUT_DIR --no-incremental
+dotnet build --no-incremental
 
 # echo '----'
 # echo "out: $OUT_DIR"
