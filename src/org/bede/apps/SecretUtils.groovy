@@ -10,7 +10,7 @@ package org.bede.apps;
 def withSecretEnv(ArrayList<String> varAndPasswordList, Closure closure) {
 
   def secrets = varAndPasswordList.collect { it -> 
-    v = it.split('=')
+    def v = it.split('=')
     return [var : "${v[0]}", password : "${v[1]}"]
   }
 
