@@ -5,6 +5,16 @@
 # SONAR_URL=
 # BRANCH_NAME=
 
+env
+echo '------'
+echo "ls -la"
+echo "PROJECT_ID=[$PROJECT_ID]"
+echo "ACCESS_TOKEN=[$ACCESS_TOKEN]"
+echo "SONAR_URL=[$SONAR_URL]"
+echo "BRANCH_NAME=[$BRANCH_NAME]"
+
+ls -la
+
 dotnet sonarscanner begin /k:"$PROJECT_ID" \
     /d:sonar.token="$ACCESS_TOKEN" \
     /d:sonar.cs.opencover.reportsPaths=coverage.xml \
