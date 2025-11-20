@@ -35,7 +35,7 @@ echo '----'
 
 coverlet $OUT_DIR/unittests.dll \
     --target "dotnet" \
-    --targetargs "test --no-build" \
+    --targetargs "test $PWD/unittests/unittests.csproj --no-build" \
     -f=opencover \
     -o="coverage.xml"
 
