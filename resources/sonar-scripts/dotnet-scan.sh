@@ -17,6 +17,10 @@
 
 OUT_DIR="$PWD/release"
 
+OUTDIR=$(dotnet msbuild -nologo -t:Build -property:Configuration=Release -getProperty:TargetDir)
+echo "Output directory: $OUTDIR"
+
+
 dotnet sonarscanner begin /k:"$PROJECT_ID" \
     /d:sonar.token="$ACCESS_TOKEN" \
     /d:sonar.cs.opencover.reportsPaths=coverage.xml \
@@ -32,7 +36,7 @@ dotnet build --no-incremental
 # echo "out: $OUT_DIR"
 # ls -la $OUT_DIR
 # echo '----'
-ls -la $PWD/unittests
+# ls -la $PWD/unittests
 
 coverlet $OUT_DIR/unittests.dll \
     --target "dotnet" \
