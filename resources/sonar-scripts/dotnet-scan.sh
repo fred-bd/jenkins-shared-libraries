@@ -17,7 +17,7 @@
 
 OUT_DIR="$PWD/release"
 
-OUTDIR=$(dotnet msbuild -nologo -t:Build -property:Configuration=Release -getProperty:TargetDir)
+OUTDIR=$(dotnet msbuild unittests -nologo -t:Build -property:Configuration=Release -getProperty:TargetDir)
 echo "Output directory: $OUTDIR"
 
 
