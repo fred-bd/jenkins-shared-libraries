@@ -20,9 +20,10 @@ OUT_DIR=./release
 dotnet sonarscanner begin /k:"$PROJECT_ID" \
     /d:sonar.token="$ACCESS_TOKEN" \
     /d:sonar.cs.opencover.reportsPaths=coverage.xml \
-    /d:sonar.host.url="$SONAR_URL" \
-    /d:sonar.pullrequest.branch="$BRANCH_NAME" \
-    /d:sonar.pullrequest.base="main"
+    /d:sonar.host.url="$SONAR_URL" 
+    # \
+    # /d:sonar.pullrequest.branch="$BRANCH_NAME" \
+    # /d:sonar.pullrequest.base="main"
 
 dotnet build -c Release -o $OUT_DIR --no-incremental
 
