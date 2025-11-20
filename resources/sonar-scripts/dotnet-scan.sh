@@ -5,15 +5,17 @@
 # SONAR_URL=
 # BRANCH_NAME=
 
-env
-echo '------'
-echo "ls -la"
-echo "PROJECT_ID=[$PROJECT_ID]"
-echo "ACCESS_TOKEN=[$ACCESS_TOKEN]"
-echo "SONAR_URL=[$SONAR_URL]"
-echo "BRANCH_NAME=[$BRANCH_NAME]"
+# env
+# echo '------'
+# echo "ls -la"
+# echo "PROJECT_ID=[$PROJECT_ID]"
+# echo "ACCESS_TOKEN=[$ACCESS_TOKEN]"
+# echo "SONAR_URL=[$SONAR_URL]"
+# echo "BRANCH_NAME=[$BRANCH_NAME]"
 
-ls -la
+# ls -la
+
+OUT_DIR=./release
 
 dotnet sonarscanner begin /k:"$PROJECT_ID" \
     /d:sonar.token="$ACCESS_TOKEN" \
@@ -22,11 +24,11 @@ dotnet sonarscanner begin /k:"$PROJECT_ID" \
     /d:sonar.pullrequest.branch="$BRANCH_NAME" \
     /d:sonar.pullrequest.base="main"
 
-dotnet build -c Release -o ./release --no-incremental
+dotnet build -c Release -o $OUT_DIR --no-incremental
 
-coverlet ./release/unittests.dll \
+coverlet $OUT_DIR/unittests.dll \
     --target "dotnet" \
-    --targetargs "test --no-build" \
+    --targetargs "test --no-build -c Release -r $OUT_DIR/unittests.dll" \
     -f=opencover \
     -o="coverage.xml"
 
