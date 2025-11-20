@@ -28,7 +28,7 @@ dotnet build -c Release -o $OUT_DIR --no-incremental
 
 coverlet $OUT_DIR/unittests.dll \
     --target "dotnet" \
-    --targetargs "test --no-build -c Release -r $OUT_DIR/unittests.dll" \
+    --targetargs "test unittests --no-build" \
     -f=opencover \
     -o="coverage.xml"
 

@@ -26,7 +26,7 @@ def call(body) {
             def shParams = [
               'project_id' : project_id,
               'access_token' : sonarToken,
-              'sonar_url' : 'http://sonarqube:9000',
+              'sonar_url' : 'http://80.0.0.1:9000',
               'branch_name' : env.BRANCH_NAME,
               'path' : "${env.PATH}:/home/jenkins/dotnet:/home/jenkins/.dotnet/tools"
             ]
