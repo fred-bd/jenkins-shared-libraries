@@ -2,6 +2,13 @@
 
 OUT_DIR=$(dotnet msbuild unittests -nologo -t:Build -property:Configuration=Debug -getProperty:TargetDir)
 
+
+echo "====="
+echo "$SONAR_URL"
+echo "$BRANCH_NAME"
+echo "$OUT_DIR"
+echo "====="
+
 dotnet sonarscanner begin /k:"$PROJECT_ID" \
     /d:sonar.token="$ACCESS_TOKEN" \
     /d:sonar.cs.opencover.reportsPaths=coverage.xml \
