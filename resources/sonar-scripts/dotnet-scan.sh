@@ -2,10 +2,13 @@
 
 OUT_DIR=$(dotnet msbuild unittests -nologo -t:Build -property:Configuration=Debug -getProperty:TargetDir)
 
-dotnet sonarscanner begin /k:"$PROJECT_ID-$BRANCH_NAME" \
+dotnet sonarscanner begin /k:"$PROJECT_ID" \
     /d:sonar.token="$ACCESS_TOKEN" \
     /d:sonar.cs.opencover.reportsPaths=coverage.xml \
-    /d:sonar.host.url="$SONAR_URL" 
+    /d:sonar.host.url="$SONAR_URL" \
+    /d:sonar.pullrequest.key="$BRANCH_NAME" \
+    /d:sonar.pullrequest.branch="$BRANCH_NAME" \
+    /d:sonar.pullrequest.base="main"
 
 dotnet build --no-incremental
 
