@@ -2,6 +2,8 @@
 
 OUT_DIR=$(dotnet msbuild unittests -nologo -t:Build -property:Configuration=Debug -getProperty:TargetDir)
 
+echo "branch: $BRANCH_NAME"
+
 
 if [ "$BRANCH_NAME" == "main" ]; then
   dotnet sonarscanner begin /k:"$PROJECT_ID" \
@@ -18,6 +20,8 @@ else
     /d:sonar.pullrequest.key="$BRANCH_NAME" \
     /d:sonar.pullrequest.branch="$BRANCH_NAME" \
     /d:sonar.pullrequest.base="main"
+
+    echo "branch not main"
 fi
 
 dotnet build --no-incremental
