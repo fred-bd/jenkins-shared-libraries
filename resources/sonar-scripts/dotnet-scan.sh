@@ -7,7 +7,9 @@ if [ "$BRANCH_NAME" == "main" ]; then
   dotnet sonarscanner begin /k:"$PROJECT_ID" \
     /d:sonar.token="$ACCESS_TOKEN" \
     /d:sonar.cs.opencover.reportsPaths=coverage.xml \
-    /d:sonar.host.url="$SONAR_URL" 
+    /d:sonar.host.url="$SONAR_URL"
+
+    echo "branch main"
 else
   dotnet sonarscanner begin /k:"$PROJECT_ID" \
     /d:sonar.token="$ACCESS_TOKEN" \
