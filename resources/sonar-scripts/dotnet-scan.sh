@@ -3,19 +3,20 @@
 OUT_DIR=$(dotnet msbuild unittests -nologo -t:Build -property:Configuration=Debug -getProperty:TargetDir)
 
 
-echo "====="
-echo "$SONAR_URL"
-echo "$BRANCH_NAME"
-echo "$OUT_DIR"
-echo "====="
-
-dotnet sonarscanner begin /k:"$PROJECT_ID" \
+if [ "$BRANCH_NAME" == "main" ]; then
+  dotnet sonarscanner begin /k:"$PROJECT_ID" \
+    /d:sonar.token="$ACCESS_TOKEN" \
+    /d:sonar.cs.opencover.reportsPaths=coverage.xml \
+    /d:sonar.host.url="$SONAR_URL" 
+else
+  dotnet sonarscanner begin /k:"$PROJECT_ID" \
     /d:sonar.token="$ACCESS_TOKEN" \
     /d:sonar.cs.opencover.reportsPaths=coverage.xml \
     /d:sonar.host.url="$SONAR_URL" \
     /d:sonar.pullrequest.key="$BRANCH_NAME" \
     /d:sonar.pullrequest.branch="$BRANCH_NAME" \
     /d:sonar.pullrequest.base="main"
+fi
 
 dotnet build --no-incremental
 
