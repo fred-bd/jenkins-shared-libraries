@@ -5,25 +5,25 @@ OUT_DIR=$(dotnet msbuild unittests -nologo -t:Build -property:Configuration=Debu
 #####
 # This code would be used with branch plugin for Sonar (I did not make it to work)
 #####
-# if [ "$BRANCH_NAME" == "main" ]; then
-#   dotnet sonarscanner begin /k:"$PROJECT_ID" \
-#     /d:sonar.token="$ACCESS_TOKEN" \
-#     /d:sonar.cs.opencover.reportsPaths=coverage.xml \
-#     /d:sonar.host.url="$SONAR_URL"
-# else
-#   dotnet sonarscanner begin /k:"$PROJECT_ID" \
-#     /d:sonar.token="$ACCESS_TOKEN" \
-#     /d:sonar.cs.opencover.reportsPaths=coverage.xml \
-#     /d:sonar.host.url="$SONAR_URL" \
-#     /d:sonar.pullrequest.key="$BRANCH_NAME" \
-#     /d:sonar.pullrequest.branch="$BRANCH_NAME" \
-#     /d:sonar.pullrequest.base="main"
-# fi
+if [ "$BRANCH_NAME" == "main" ]; then
+  dotnet sonarscanner begin /k:"$PROJECT_ID" \
+    /d:sonar.token="$ACCESS_TOKEN" \
+    /d:sonar.cs.opencover.reportsPaths=coverage.xml \
+    /d:sonar.host.url="$SONAR_URL"
+else
+  dotnet sonarscanner begin /k:"$PROJECT_ID" \
+    /d:sonar.token="$ACCESS_TOKEN" \
+    /d:sonar.cs.opencover.reportsPaths=coverage.xml \
+    /d:sonar.host.url="$SONAR_URL" \
+    /d:sonar.pullrequest.key="$BRANCH_NAME" \
+    /d:sonar.pullrequest.branch="$BRANCH_NAME" \
+    /d:sonar.pullrequest.base="main"
+fi
 
-dotnet sonarscanner begin /k:"$PROJECT_ID-$BRANCH_NAME" \
-  /d:sonar.token="$ACCESS_TOKEN" \
-  /d:sonar.cs.opencover.reportsPaths=coverage.xml \
-  /d:sonar.host.url="$SONAR_URL"
+# dotnet sonarscanner begin /k:"$PROJECT_ID-$BRANCH_NAME" \
+#   /d:sonar.token="$ACCESS_TOKEN" \
+#   /d:sonar.cs.opencover.reportsPaths=coverage.xml \
+#   /d:sonar.host.url="$SONAR_URL"
 
 dotnet build --no-incremental
 
