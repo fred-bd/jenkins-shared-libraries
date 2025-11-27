@@ -28,7 +28,8 @@ def call(body) {
               'access_token' : sonarToken,
               'sonar_url' : 'http://80.0.0.1:9000',
               'branch_name' : env.BRANCH_NAME,
-              'path' : "${env.PATH}:/home/jenkins/dotnet:/home/jenkins/.dotnet/tools"
+              'path' : "${env.PATH}:/home/jenkins/dotnet:/home/jenkins/.dotnet/tools",
+              'PR_ID' : env.CHANGE_ID
             ]
 
             def secrets = ['access_token']

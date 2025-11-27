@@ -15,7 +15,7 @@ else
     /d:sonar.token="$ACCESS_TOKEN" \
     /d:sonar.cs.opencover.reportsPaths=coverage.xml \
     /d:sonar.host.url="$SONAR_URL" \
-    /d:sonar.pullrequest.key="$BRANCH_NAME" \
+    /d:sonar.pullrequest.key="$PR_ID" \
     /d:sonar.pullrequest.branch="$BRANCH_NAME" \
     /d:sonar.pullrequest.base="main"
 fi
