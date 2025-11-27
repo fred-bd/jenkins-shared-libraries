@@ -5,6 +5,9 @@
 # CLUSTER_CONFIG_PATH
 # HELM_ARTIFACT_USER
 # HELM_ARTIFACT_PASSWORD
+# ----------
+# Optionals
+# EXTRA_COMPONENTS
 
 manifests_base=flux-manifests
 manifests_dir="$manifests_base/base"
@@ -67,7 +70,13 @@ done
 
 kubectl kustomize $manifests_dir -o $manifests_dir/../flux-config.yaml
 
-flux install \
-  --export > $manifests_dir/../flux-deploy.yaml
+
+if [ -z "$EXTRA_COMPONENTS" ]; then
+  flux install \
+    --export > $manifests_dir/../flux-deploy.yaml
+else
+  flux install --components-extra "$EXTRA_COMPONENTS" \
+    --export > $manifests_dir/../flux-deploy.yaml
+fi
 
 echo "$manifests_base"
