@@ -99,9 +99,9 @@ def call(body) {
                 shParams << ['extra_components' : "${fluxExtraComponents}"]
               }
 
-              def secrets = ['helm_artifact_user', 'helm_artifact_password']
+              def secretEnv= ['helm_artifact_user', 'helm_artifact_password']
 
-              fluxManifestsDir = fileUtils.runSHScriptWithReturn(shParams, 'flux-scripts/generate-flux-manifests.sh', secrets) 
+              fluxManifestsDir = fileUtils.runSHScriptWithReturn(shParams, 'flux-scripts/generate-flux-manifests.sh', secretEnv) 
             }
           }
         }
