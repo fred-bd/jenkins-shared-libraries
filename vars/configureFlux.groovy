@@ -96,7 +96,7 @@ def call(body) {
               ]
 
               if(fluxExtraComponents) {
-                shParams << ['extra_components', "${fluxExtraComponents}"]
+                shParams << ['extra_components' : "${fluxExtraComponents}"]
               }
 
               fluxManifestsDir = fileUtils.runSHScriptWithReturn(shParams, 'flux-scripts/generate-flux-manifests.sh') 
