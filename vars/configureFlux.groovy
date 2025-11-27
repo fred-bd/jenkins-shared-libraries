@@ -22,6 +22,7 @@ def call(body) {
   def shardEnabled = params.ConfigureSharding
   def clustersRepo = params.FluxConfigRepo 
   def clustersRepoPath = params.FluxConfigRepoPath
+  def fluxExtraComponents = params.ExtraComponents
 
   def fluxManifestsDir
 
@@ -91,8 +92,12 @@ def call(body) {
                 'helm_artifact_user' : user,
                 'helm_artifact_password' : pass,
                 'cluster_config_repository' : clustersRepo,
-                'cluster_config_path' : clustersRepoPath 
+                'cluster_config_path' : clustersRepoPath
               ]
+
+              if(fluxExtraComponents) {
+                shParams << ['extra_components', fluxExtraComponents]
+              }
 
               fluxManifestsDir = fileUtils.runSHScriptWithReturn(shParams, 'flux-scripts/generate-flux-manifests.sh') 
             }
